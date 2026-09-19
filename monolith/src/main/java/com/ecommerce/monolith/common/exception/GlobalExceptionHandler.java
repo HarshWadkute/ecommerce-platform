@@ -10,23 +10,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BaseException.class)
-    public ResponseEntity<String> handleBaseException(BaseException e, HttpServletRequest request) {
-        ApiError error = new ApiError(e.getHttpStatus(),e.getMessage(),request.getRequestURI());
-        return ResponseEntity
-                .status(e.getHttpStatus())
-                .body(error.toString());
+    public ResponseEntity<ApiError> handleBaseException(BaseException e, HttpServletRequest request) {
+        ApiError error = new ApiError(e.getHttpStatus(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(e.getHttpStatus()).body(error);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception e, HttpServletRequest request) {
-        ApiError error= new ApiError(
+    public ResponseEntity<ApiError> handleException(Exception e, HttpServletRequest request) {
+        ApiError error = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 e.getMessage(),
                 request.getRequestURI()
         );
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(error.toString());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
-
 }
